@@ -7,7 +7,7 @@ English | [中文简体](README_CN.md)
 
 An Android-only Flutter plugin for [sing-box](https://github.com/SagerNet/sing-box), maintained for FLsing and other Android clients.
 
-This fork intentionally removes non-Android platform registrations and examples. See [Android Architecture](docs/Android-Architecture.md) for ownership boundaries and package-size guidance.
+This fork intentionally removes non-Android platform registrations and replaces the legacy demo app with [documentation-driven examples](example/README.md). See [Android Architecture](docs/Android-Architecture.md) for ownership boundaries and package-size guidance.
 
 ## 🚀 Projects Using This Plugin
 
@@ -75,7 +75,7 @@ FlutterSingBox().connectedStatusStream.listen((status) {
 
 ## Example
 
-Check out the [example](https://github.com/WEP-56/flutter_sing_box/tree/master/example) directory for a complete Android demo application using Riverpod for state management.
+Use the [example documentation](https://github.com/WEP-56/flutter_sing_box/tree/master/example) for the capability matrix, lifecycle, configuration ownership, event streams, per-outbound latency tests, Android integration, and production validation.
 
 ## Contributing
 

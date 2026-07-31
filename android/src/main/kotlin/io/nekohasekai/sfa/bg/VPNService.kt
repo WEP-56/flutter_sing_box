@@ -69,7 +69,7 @@ class VPNService :
 
         val builder =
             Builder()
-                .setSession("Clash Sing")
+                .setSession(PluginManager.applicationLabel)
                 .setMtu(options.mtu)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {

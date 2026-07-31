@@ -55,4 +55,26 @@ void main() {
       ),
     );
   });
+
+  test('urlTestOutbound sends arguments and returns the delay', () async {
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(platform.methodChannel, (methodCall) async {
+          receivedCall = methodCall;
+          return 86;
+        });
+
+    final delay = await platform.urlTestOutbound(
+      outboundTag: 'node-a',
+      url: 'https://www.gstatic.com/generate_204',
+      timeout: const Duration(seconds: 8),
+    );
+
+    expect(delay, 86);
+    expect(receivedCall.method, 'urlTestOutbound');
+    expect(receivedCall.arguments, {
+      'outboundTag': 'node-a',
+      'url': 'https://www.gstatic.com/generate_204',
+      'timeoutMs': 8000,
+    });
+  });
 }

@@ -33,7 +33,7 @@ flutter_sing_box/
 |     |  `- utils/                             # 原生配置与设置存储
 |     `- kotlin/io/nekohasekai/sfa/            # VPN/代理服务及平台适配层
 |- assets/configs/                             # 默认 sing-box 配置模板
-|- example/android/                            # Android 示例工程
+|- example/                                    # 文档驱动的能力与使用范例
 `- test/                                       # Dart 单元测试
 ```
 
@@ -63,6 +63,12 @@ Android 服务通过 AIDL 向插件进程回传状态，`SingBoxConnector` 再�
 - `clashModeStream`
 - `logStream`
 - `proxyStateStream`
+
+插件还通过 MethodChannel 提供配置校验和两类测速命令：
+
+- `checkConfig` 在后台线程完成 libbox 配置校验。
+- `urlTest` 提交整组 command 测速，结果异步进入 `groupStream`。
+- `urlTestOutbound` 通过活动实例的认证 loopback Clash API 返回单 outbound 延迟。
 
 ## 4. 原生依赖与包体
 
@@ -108,13 +114,14 @@ FLsing 主目录中的 `flutter_sing_box/` 是独立 Git 工作区，仅用于�
 - VPN 服务当前使用独立 `:remote` 进程，MMKV、AIDL、事件流和重载行为都依赖多进程语义。
 - `BoxService` 中将包名应用到 `VpnService.Builder` 的 `includePackage/excludePackage` 调用当前被注释，分应用代理恢复后必须做真机闭环验证。
 - `onServiceAlert` 当前只在原生层记录错误并发送 stopped 状态，Dart 无法取得告警类型和消息。
-- 插件已提供 `checkConfig` 配置校验 API；FLsing 迁移到该 API 后可删除应用层的 libbox 直接依赖。
+- 插件已提供 `checkConfig` 配置校验 API，FLsing 不再直接编译依赖 libbox。
+- 单 outbound 测速依赖活动配置中的认证 loopback Clash API；controller 缺失时返回稳定错误，不回退为物理地址 TCP 测速。
 - `Dns`、`Route`、`Inbound` 等模型使用 `json_serializable`。修改带注解模型后必须重新运行代码生成，不能手改 `*.g.dart`。
 
 ## 7. 建议维护顺序
 
-1. 保持 Android-only 注册和示例，阻止 Flutter 工具重新生成其他平台目录。
-2. 将 FLsing 的配置校验桥接迁移到插件 `checkConfig` API。
+1. 保持 Android-only 注册和文档范例，阻止 Flutter 工具重新生成其他平台目录和演示应用。
+2. 为服务状态、错误告警和命令完成反馈补充结构化协议。
 3. 审计 AndroidManifest 权限、服务导出状态和前台服务类型。
 4. 清点未被 FLsing 使用的 Dart API 与原生服务，确认无外部使用者后再删除。
 5. 建立自定义 libbox 构建与发布流程，再评估协议级裁剪。

@@ -1,13 +1,19 @@
 ## Unreleased
+本分支不会更新版本号，将会保持在1.1.4版本，持续迭代
 ### Features
 * 新增 `checkConfig(String configuration)` API，在 Android 后台线程调用 libbox 校验配置，并提供稳定错误码。
+* 新增 `urlTestOutbound(...)`，通过认证的 loopback Clash API 完成单 outbound 内核测速并返回延迟。
+* VPN 会话名称和插件通知默认标题改为继承宿主应用标签，不再硬编码 `Clash Sing`。
 
 ### Breaking Changes
 * 插件调整为 Android-only，移除 iOS 注册、原生实现和示例工程。
 
 ### Documentation
 * 新增 Android 插件结构、运行链路、维护边界和包体优化说明。
+* 删除旧 Flutter 示例工程，改为能力矩阵和分主题 Markdown 使用范例。
 
+
+## 👆👆👆👆 WEP-56 fork change log 👆👆👆👆（From 2026/7/31）
 
 ## 1.1.4
 ### Dependencies

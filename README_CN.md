@@ -7,7 +7,7 @@
 
 一个面向 Android 的 [sing-box](https://github.com/SagerNet/sing-box) Flutter 插件，由 FLsing 使用并维护。
 
-此分支明确移除非 Android 平台注册与示例。维护边界、运行链路和包体说明见 [Android 结构文档](docs/Android-Architecture.md)。
+此分支明确移除非 Android 平台注册，并用[文档驱动范例](example/README.md)替代旧演示应用。维护边界、运行链路和包体说明见 [Android 结构文档](docs/Android-Architecture.md)。
 
 ## 🚀 使用此插件的项目
 
@@ -75,7 +75,7 @@ FlutterSingBox().connectedStatusStream.listen((status) {
 
 ## 示例
 
-查看 [example](https://github.com/WEP-56/flutter_sing_box/tree/master/example) 目录，了解使用 Riverpod 进行状态管理的 Android 演示应用程序。
+查看 [example 文档](https://github.com/WEP-56/flutter_sing_box/tree/master/example)，了解能力矩阵、生命周期、配置所有权、事件流、单 outbound 内核测速、Android 集成和发布验收。
 
 ## 贡献
 

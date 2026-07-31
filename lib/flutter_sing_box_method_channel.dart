@@ -66,6 +66,26 @@ class MethodChannelFlutterSingBox extends FlutterSingBoxPlatform {
   }
 
   @override
+  Future<int> urlTestOutbound({
+    required String outboundTag,
+    required String url,
+    Duration timeout = const Duration(seconds: 10),
+  }) async {
+    final delay = await methodChannel.invokeMethod<int>('urlTestOutbound', {
+      'outboundTag': outboundTag,
+      'url': url,
+      'timeoutMs': timeout.inMilliseconds,
+    });
+    if (delay == null) {
+      throw PlatformException(
+        code: 'URL_TEST_FAILED',
+        message: 'The core returned no delay result',
+      );
+    }
+    return delay;
+  }
+
+  @override
   Future<String> getSingBoxVersion() async {
     return await methodChannel.invokeMethod('getSingBoxVersion');
   }

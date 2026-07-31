@@ -75,6 +75,15 @@ abstract class FlutterSingBoxPlatform extends PlatformInterface {
     throw UnimplementedError('urlTest() has not been implemented.');
   }
 
+  /// Tests one outbound and returns its delay in milliseconds.
+  Future<int> urlTestOutbound({
+    required String outboundTag,
+    required String url,
+    Duration timeout = const Duration(seconds: 10),
+  }) async {
+    throw UnimplementedError('urlTestOutbound() has not been implemented.');
+  }
+
   /// Gets the version of the underlying sing-box core.
   Future<String> getSingBoxVersion() async {
     throw UnimplementedError('getSingBoxVersion() has not been implemented.');

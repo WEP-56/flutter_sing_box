@@ -61,6 +61,10 @@ object PluginManager {
 
     val packageManager by lazy { appContext.packageManager ?: throw throwError() }
 
+    val applicationLabel by lazy {
+        appContext.applicationInfo.loadLabel(packageManager).toString()
+    }
+
     val wifiManager by lazy { appContext.getSystemService<WifiManager>() ?: throw throwError() }
 
     val notification by lazy { appContext.getSystemService<NotificationManager>() ?: throw throwError() }

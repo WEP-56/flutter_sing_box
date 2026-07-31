@@ -71,6 +71,23 @@ class FlutterSingBox {
     return await FlutterSingBoxPlatform.instance.urlTest(groupTag: groupTag);
   }
 
+  /// Tests one outbound through the active sing-box core.
+  ///
+  /// The active configuration must expose an authenticated loopback Clash API.
+  /// Unlike [urlTest], this method waits for the selected outbound's result and
+  /// returns its delay in milliseconds.
+  Future<int> urlTestOutbound({
+    required String outboundTag,
+    required String url,
+    Duration timeout = const Duration(seconds: 10),
+  }) async {
+    return await FlutterSingBoxPlatform.instance.urlTestOutbound(
+      outboundTag: outboundTag,
+      url: url,
+      timeout: timeout,
+    );
+  }
+
   /// Gets the version of the underlying sing-box core.
   Future<String> getSingBoxVersion() async {
     return await FlutterSingBoxPlatform.instance.getSingBoxVersion();

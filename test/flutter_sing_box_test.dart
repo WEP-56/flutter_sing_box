@@ -8,6 +8,7 @@ class MockFlutterSingBoxPlatform
     with MockPlatformInterfaceMixin
     implements FlutterSingBoxPlatform {
   String? checkedConfiguration;
+  String? testedOutbound;
 
   @override
   Future<void> checkConfig(String configuration) async {
@@ -50,6 +51,16 @@ class MockFlutterSingBoxPlatform
   @override
   Future<void> urlTest({required String groupTag}) {
     throw UnimplementedError();
+  }
+
+  @override
+  Future<int> urlTestOutbound({
+    required String outboundTag,
+    required String url,
+    Duration timeout = const Duration(seconds: 10),
+  }) async {
+    testedOutbound = outboundTag;
+    return 64;
   }
 
   @override
@@ -97,5 +108,19 @@ void main() {
     await FlutterSingBox().checkConfig('{"outbounds":[]}');
 
     expect(fakePlatform.checkedConfiguration, '{"outbounds":[]}');
+  });
+
+  test('urlTestOutbound delegates and returns the platform delay', () async {
+    final fakePlatform = MockFlutterSingBoxPlatform();
+    FlutterSingBoxPlatform.instance = fakePlatform;
+    addTearDown(() => FlutterSingBoxPlatform.instance = initialPlatform);
+
+    final delay = await FlutterSingBox().urlTestOutbound(
+      outboundTag: 'node-a',
+      url: 'https://www.gstatic.com/generate_204',
+    );
+
+    expect(delay, 64);
+    expect(fakePlatform.testedOutbound, 'node-a');
   });
 }
