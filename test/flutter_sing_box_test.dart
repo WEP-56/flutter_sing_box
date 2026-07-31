@@ -7,6 +7,12 @@ import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 class MockFlutterSingBoxPlatform
     with MockPlatformInterfaceMixin
     implements FlutterSingBoxPlatform {
+  String? checkedConfiguration;
+
+  @override
+  Future<void> checkConfig(String configuration) async {
+    checkedConfiguration = configuration;
+  }
 
   @override
   Future<void> init() {
@@ -34,7 +40,10 @@ class MockFlutterSingBoxPlatform
   }
 
   @override
-  Future<void> selectOutbound({required String groupTag, required String outboundTag}) {
+  Future<void> selectOutbound({
+    required String groupTag,
+    required String outboundTag,
+  }) {
     throw UnimplementedError();
   }
 
@@ -44,10 +53,12 @@ class MockFlutterSingBoxPlatform
   }
 
   @override
-  Future<void> setGroupExpand({required String groupTag, required bool isExpand}) {
+  Future<void> setGroupExpand({
+    required String groupTag,
+    required bool isExpand,
+  }) {
     throw UnimplementedError();
   }
-
 
   @override
   Stream<ClientClashMode> get clashModeStream => throw UnimplementedError();
@@ -68,21 +79,23 @@ class MockFlutterSingBoxPlatform
   Future<String> getSingBoxVersion() {
     throw UnimplementedError();
   }
-
 }
 
 void main() {
-  final FlutterSingBoxPlatform initialPlatform = FlutterSingBoxPlatform.instance;
+  final FlutterSingBoxPlatform initialPlatform =
+      FlutterSingBoxPlatform.instance;
 
   test('$MethodChannelFlutterSingBox is the default instance', () {
     expect(initialPlatform, isInstanceOf<MethodChannelFlutterSingBox>());
   });
 
-  // test('getPlatformVersion', () async {
-  //   FlutterSingBox flutterSingBoxPlugin = FlutterSingBox();
-  //   MockFlutterSingBoxPlatform fakePlatform = MockFlutterSingBoxPlatform();
-  //   FlutterSingBoxPlatform.instance = fakePlatform;
-  //
-  //   expect(await flutterSingBoxPlugin.getPlatformVersion(), '42');
-  // });
+  test('checkConfig delegates to the platform implementation', () async {
+    final fakePlatform = MockFlutterSingBoxPlatform();
+    FlutterSingBoxPlatform.instance = fakePlatform;
+    addTearDown(() => FlutterSingBoxPlatform.instance = initialPlatform);
+
+    await FlutterSingBox().checkConfig('{"outbounds":[]}');
+
+    expect(fakePlatform.checkedConfiguration, '{"outbounds":[]}');
+  });
 }

@@ -39,7 +39,10 @@ class MethodChannelFlutterSingBox extends FlutterSingBoxPlatform {
   }
 
   @override
-  Future<void> selectOutbound({required String groupTag, required String outboundTag}) async {
+  Future<void> selectOutbound({
+    required String groupTag,
+    required String outboundTag,
+  }) async {
     return await methodChannel.invokeMethod('selectOutbound', {
       "groupTag": groupTag,
       "outboundTag": outboundTag,
@@ -47,7 +50,10 @@ class MethodChannelFlutterSingBox extends FlutterSingBoxPlatform {
   }
 
   @override
-  Future<void> setGroupExpand({required String groupTag, required bool isExpand}) async {
+  Future<void> setGroupExpand({
+    required String groupTag,
+    required bool isExpand,
+  }) async {
     return await methodChannel.invokeMethod('setGroupExpand', {
       "groupTag": groupTag,
       "isExpand": isExpand,
@@ -64,13 +70,22 @@ class MethodChannelFlutterSingBox extends FlutterSingBoxPlatform {
     return await methodChannel.invokeMethod('getSingBoxVersion');
   }
 
-  final _eventChannelConnectedStatus = const EventChannel('connected_status_event');
+  @override
+  Future<void> checkConfig(String configuration) async {
+    return await methodChannel.invokeMethod<void>('checkConfig', configuration);
+  }
+
+  final _eventChannelConnectedStatus = const EventChannel(
+    'connected_status_event',
+  );
   Stream<ClientStatus>? _connectedStatusStream;
   @override
   Stream<ClientStatus> get connectedStatusStream {
-    _connectedStatusStream ??= _eventChannelConnectedStatus.receiveBroadcastStream().map((data) {
-      return ClientStatus.fromJson(jsonDecode(data));
-    });
+    _connectedStatusStream ??= _eventChannelConnectedStatus
+        .receiveBroadcastStream()
+        .map((data) {
+          return ClientStatus.fromJson(jsonDecode(data));
+        });
     return _connectedStatusStream!;
   }
 
@@ -115,7 +130,9 @@ class MethodChannelFlutterSingBox extends FlutterSingBoxPlatform {
   Stream<ProxyState>? _proxyStateStream;
   @override
   Stream<ProxyState> get proxyStateStream {
-    _proxyStateStream ??= _eventChannelProxyState.receiveBroadcastStream().map((data) {
+    _proxyStateStream ??= _eventChannelProxyState.receiveBroadcastStream().map((
+      data,
+    ) {
       if (data == ProxyState.stopped.name) return ProxyState.stopped;
       if (data == ProxyState.starting.name) return ProxyState.starting;
       if (data == ProxyState.started.name) return ProxyState.started;

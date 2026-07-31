@@ -1,11 +1,13 @@
 # flutter_sing_box
 
 [![pub package](https://img.shields.io/pub/v/flutter_sing_box.svg)](https://pub.dev/packages/flutter_sing_box)
-[![license](https://img.shields.io/github/license/clash-sing/flutter_sing_box.svg)](https://github.com/clash-sing/flutter_sing_box/blob/master/LICENSE)
+[![license](https://img.shields.io/github/license/WEP-56/flutter_sing_box.svg)](https://github.com/WEP-56/flutter_sing_box/blob/master/LICENSE)
 
 [English](README.md) | 中文简体
 
-一个基于 [sing-box](https://github.com/SagerNet/sing-box) 的强大 Flutter 插件，sing-box 是一个通用的代理平台。
+一个面向 Android 的 [sing-box](https://github.com/SagerNet/sing-box) Flutter 插件，由 FLsing 使用并维护。
+
+此分支明确移除非 Android 平台注册与示例。维护边界、运行链路和包体说明见 [Android 结构文档](docs/Android-Architecture.md)。
 
 ## 🚀 使用此插件的项目
 
@@ -28,10 +30,6 @@
 | 平台 | 支持 | 状态 |
 | :--- |:-------:| :--- |
 | Android |    ✅    | 生产就绪 |
-| Windows |   🚧    | 开发中 |
-| iOS |    ☐    | 计划中 |
-| macOS |   ☐️    | 计划中 |
-| Linux |    ☐    | 计划中 |
 
 ## 快速开始
 
@@ -77,7 +75,7 @@ FlutterSingBox().connectedStatusStream.listen((status) {
 
 ## 示例
 
-查看 [example](https://github.com/clash-sing/flutter_sing_box/tree/master/example) 目录，了解使用 Riverpod 进行状态管理的完整演示应用程序。
+查看 [example](https://github.com/WEP-56/flutter_sing_box/tree/master/example) 目录，了解使用 Riverpod 进行状态管理的 Android 演示应用程序。
 
 ## 贡献
 

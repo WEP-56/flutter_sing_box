@@ -55,12 +55,18 @@ abstract class FlutterSingBoxPlatform extends PlatformInterface {
   }
 
   /// Selects an outbound for a specific group.
-  Future<void> selectOutbound({required String groupTag, required String outboundTag}) async {
+  Future<void> selectOutbound({
+    required String groupTag,
+    required String outboundTag,
+  }) async {
     throw UnimplementedError('selectOutbound() has not been implemented.');
   }
 
   /// Sets the expansion state of a group.
-  Future<void> setGroupExpand({required String groupTag, required bool isExpand}) async {
+  Future<void> setGroupExpand({
+    required String groupTag,
+    required bool isExpand,
+  }) async {
     throw UnimplementedError('setGroupExpand() has not been implemented.');
   }
 
@@ -72,6 +78,11 @@ abstract class FlutterSingBoxPlatform extends PlatformInterface {
   /// Gets the version of the underlying sing-box core.
   Future<String> getSingBoxVersion() async {
     throw UnimplementedError('getSingBoxVersion() has not been implemented.');
+  }
+
+  /// Validates a sing-box configuration with the bundled core.
+  Future<void> checkConfig(String configuration) async {
+    throw UnimplementedError('checkConfig() has not been implemented.');
   }
 
   /// A stream of client connection status updates.

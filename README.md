@@ -1,11 +1,13 @@
 # flutter_sing_box
 
 [![pub package](https://img.shields.io/pub/v/flutter_sing_box.svg)](https://pub.dev/packages/flutter_sing_box)
-[![license](https://img.shields.io/github/license/clash-sing/flutter_sing_box.svg)](https://github.com/clash-sing/flutter_sing_box/blob/master/LICENSE)
+[![license](https://img.shields.io/github/license/WEP-56/flutter_sing_box.svg)](https://github.com/WEP-56/flutter_sing_box/blob/master/LICENSE)
 
 English | [中文简体](README_CN.md)
 
-A powerful Flutter plugin for [sing-box](https://github.com/SagerNet/sing-box), the universal proxy platform.
+An Android-only Flutter plugin for [sing-box](https://github.com/SagerNet/sing-box), maintained for FLsing and other Android clients.
+
+This fork intentionally removes non-Android platform registrations and examples. See [Android Architecture](docs/Android-Architecture.md) for ownership boundaries and package-size guidance.
 
 ## 🚀 Projects Using This Plugin
 
@@ -28,10 +30,6 @@ A powerful Flutter plugin for [sing-box](https://github.com/SagerNet/sing-box), 
 | Platform | Support | Status |
 | :--- |:-------:| :--- |
 | Android |    ✅    | Production Ready |
-| Windows |   🚧    | In Development |
-| iOS |    ☐    | Planned |
-| macOS |   ☐️    | Planned |
-| Linux |    ☐    | Planned |
 
 ## Getting Started
 
@@ -77,7 +75,7 @@ FlutterSingBox().connectedStatusStream.listen((status) {
 
 ## Example
 
-Check out the [example](https://github.com/clash-sing/flutter_sing_box/tree/master/example) directory for a complete demo application using Riverpod for state management.
+Check out the [example](https://github.com/WEP-56/flutter_sing_box/tree/master/example) directory for a complete Android demo application using Riverpod for state management.
 
 ## Contributing
 

@@ -1,3 +1,14 @@
+## Unreleased
+### Features
+* 新增 `checkConfig(String configuration)` API，在 Android 后台线程调用 libbox 校验配置，并提供稳定错误码。
+
+### Breaking Changes
+* 插件调整为 Android-only，移除 iOS 注册、原生实现和示例工程。
+
+### Documentation
+* 新增 Android 插件结构、运行链路、维护边界和包体优化说明。
+
+
 ## 1.1.4
 ### Dependencies
 * 升级 Android 端 `libbox`（sing-box 内核）：`1.13.12` → `1.13.14`

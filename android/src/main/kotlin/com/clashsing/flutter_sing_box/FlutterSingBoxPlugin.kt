@@ -15,6 +15,9 @@ import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry
 import io.nekohasekai.libbox.Libbox
 import io.nekohasekai.sfa.bg.BoxService
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicReference
 
 class FlutterSingBoxPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, PluginRegistry.ActivityResultListener {
@@ -28,6 +31,8 @@ class FlutterSingBoxPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, Pl
     private var singBoxConnector: SingBoxConnector? = null
     private var activityBinding: ActivityPluginBinding? = null
     private val pendingStartVpnResult = AtomicReference<Result?>(null)
+    private val pendingConfigurationResults = ConcurrentHashMap.newKeySet<Result>()
+    private var configurationExecutor: ExecutorService? = null
 
     override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         Log.d(TAG, "onAttachedToEngine ---------------------------------")
@@ -35,12 +40,21 @@ class FlutterSingBoxPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, Pl
         channel.setMethodCallHandler(this)
         PluginManager.init(flutterPluginBinding.applicationContext)
         singBoxConnector = SingBoxConnector(flutterPluginBinding.binaryMessenger)
+        configurationExecutor = Executors.newSingleThreadExecutor()
     }
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         Log.d(TAG, "onDetachedFromEngine ---------------------------------")
         channel.setMethodCallHandler(null)
         singBoxConnector = null
+        val executor = configurationExecutor
+        configurationExecutor = null
+        executor?.shutdownNow()
+        pendingConfigurationResults.toList().forEach { result ->
+            if (pendingConfigurationResults.remove(result)) {
+                result.error("PLUGIN_UNAVAILABLE", "Plugin is not attached to an engine", null)
+            }
+        }
     }
 
     override fun onMethodCall(call: MethodCall, result: Result) {
@@ -156,6 +170,46 @@ class FlutterSingBoxPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, Pl
             "getSingBoxVersion" -> {
                 val version = Libbox.version()
                 result.success(version)
+            }
+            "checkConfig" -> {
+                if (call.arguments !is String) {
+                    result.error("INVALID_ARGUMENTS", "Configuration must be a string", null)
+                    return
+                }
+                val configuration = call.arguments as String
+                if (configuration.isBlank()) {
+                    result.error("CONFIG_EMPTY", "Configuration must not be empty", null)
+                    return
+                }
+                val executor = configurationExecutor
+                if (executor == null || executor.isShutdown) {
+                    result.error("PLUGIN_UNAVAILABLE", "Plugin is not attached to an engine", null)
+                    return
+                }
+                pendingConfigurationResults.add(result)
+                runCatching {
+                    executor.execute {
+                        runCatching { Libbox.checkConfig(configuration) }
+                            .onSuccess {
+                                if (pendingConfigurationResults.remove(result)) {
+                                    result.success(null)
+                                }
+                            }
+                            .onFailure { error ->
+                                if (pendingConfigurationResults.remove(result)) {
+                                    result.error(
+                                        "CONFIG_INVALID",
+                                        error.message ?: "Configuration is invalid",
+                                        null,
+                                    )
+                                }
+                            }
+                    }
+                }.onFailure {
+                    if (pendingConfigurationResults.remove(result)) {
+                        result.error("PLUGIN_UNAVAILABLE", "Plugin is not attached to an engine", null)
+                    }
+                }
             }
             else -> {
                 result.notImplemented()

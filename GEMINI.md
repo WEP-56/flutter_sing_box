@@ -4,14 +4,13 @@
 
 ## Project Overview
 
-这是一个 Flutter Plugin 工程。
+这是一个仅支持 Android 的 Flutter Plugin 工程。
 
 - Plugin 名称：flutter_sing_box
 - Plugin 功能：通过封装 sing-box 的功能，实现 VPN 代理功能。
 - sing-box 仓库：https://github.com/SagerNet/sing-box
 - sing-box 文档：https://sing-box.sagernet.org/zh/
 - sing-box Android Demo 仓库：https://github.com/SagerNet/sing-box-for-android
-- sing-box iOS Demo 仓库：https://github.com/SagerNet/sing-box-for-apple
 
 
 ## Instructions for Gemini

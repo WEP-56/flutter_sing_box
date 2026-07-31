@@ -4,10 +4,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Flutter plugin wrapping [sing-box](https://github.com/SagerNet/sing-box) for VPN proxy functionality. Only Android is production-ready; iOS/Windows/macOS/Linux are planned.
+Android-only Flutter plugin wrapping [sing-box](https://github.com/SagerNet/sing-box) for VPN proxy functionality. Non-Android platform implementations are intentionally out of scope.
 
 - **Plugin package**: `com.clashsing.flutter_sing_box`
-- **Dart SDK**: ^3.9.0, **Flutter**: >=3.3.0
+- **Dart SDK**: ^3.11.0, **Flutter**: >=3.41.0
 - **License**: GPL-3.0
 
 ## Build & Development Commands
@@ -38,7 +38,7 @@ CI pipeline runs `flutter analyze --fatal-infos` then `flutter test` before publ
 FlutterSingBox (lib/flutter_sing_box.dart)
   → FlutterSingBoxPlatform (platform interface)
     → FlutterSingBoxMethodChannel (method channel)
-      → Native implementations (Kotlin / Swift)
+      → Android implementation (Kotlin)
 ```
 
 - `FlutterSingBox` is the public API facade — delegates everything to the platform interface
@@ -71,9 +71,10 @@ FlutterSingBox (lib/flutter_sing_box.dart)
 
 ### Native Side (Android)
 
-- Kotlin, min SDK 26, uses sing-box libbox v1.12.25
-- Key classes: `BoxService`, `ClashSingVpnService` (VPN service), `ProxyService`, `ProfileManager`, `SettingsManager`
+- Kotlin, min SDK 26, uses sing-box libbox v1.13.14
+- Key classes: `BoxService`, `VPNService`, `ProxyService`, `ProfileManager`, `SettingsManager`
 - AIDL-based communication between service and plugin
+- Detailed ownership and package layout: `docs/Android-Architecture.md`
 
 ## Conventions
 

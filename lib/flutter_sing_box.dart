@@ -40,16 +40,28 @@ class FlutterSingBox {
   ///
   /// [groupTag] The tag of the group.
   /// [outboundTag] The tag of the outbound to select.
-  Future<void> selectOutbound({required String groupTag, required String outboundTag}) async {
-    return await FlutterSingBoxPlatform.instance.selectOutbound(groupTag: groupTag, outboundTag: outboundTag);
+  Future<void> selectOutbound({
+    required String groupTag,
+    required String outboundTag,
+  }) async {
+    return await FlutterSingBoxPlatform.instance.selectOutbound(
+      groupTag: groupTag,
+      outboundTag: outboundTag,
+    );
   }
 
   /// Sets the expansion state of a group in the UI.
   ///
   /// [groupTag] The tag of the group.
   /// [isExpand] Whether the group should be expanded or collapsed.
-  Future<void> setGroupExpand({required String groupTag, required bool isExpand}) async {
-    return await FlutterSingBoxPlatform.instance.setGroupExpand(groupTag: groupTag, isExpand: isExpand);
+  Future<void> setGroupExpand({
+    required String groupTag,
+    required bool isExpand,
+  }) async {
+    return await FlutterSingBoxPlatform.instance.setGroupExpand(
+      groupTag: groupTag,
+      isExpand: isExpand,
+    );
   }
 
   /// Performs a URL test for a specific group.
@@ -62,6 +74,11 @@ class FlutterSingBox {
   /// Gets the version of the underlying sing-box core.
   Future<String> getSingBoxVersion() async {
     return await FlutterSingBoxPlatform.instance.getSingBoxVersion();
+  }
+
+  /// Validates a sing-box configuration with the bundled core.
+  Future<void> checkConfig(String configuration) async {
+    return await FlutterSingBoxPlatform.instance.checkConfig(configuration);
   }
 
   /// A stream of client connection status updates.
