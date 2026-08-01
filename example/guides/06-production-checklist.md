@@ -41,6 +41,7 @@ Git 依赖更新后检查 `pubspec.lock` 的 `resolved-ref`，确认它指向已
 - 空配置和错误配置不会覆盖当前可用活动配置。
 - 写入中断后可以从备份恢复。
 - Clash API 只监听 loopback，并使用每安装随机 secret。
+- Android Network Security Config 只为 loopback controller 放行明文 HTTP。
 - 设置备份不包含订阅链接、节点凭据或 Clash API secret。
 
 ## 6. 测速

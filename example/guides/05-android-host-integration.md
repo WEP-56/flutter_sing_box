@@ -32,17 +32,34 @@
 该标签用于 Android 系统 VPN 面板中的会话名称和插件通知默认标题。活动 profile 名称仍可作为
 通知内容标题。
 
-## 3. VPN 权限
+## 3. Loopback Clash API
+
+单 outbound 测速通过明文 HTTP 访问活动 sing-box 实例的 loopback Clash API。Android 9+ 宿主若
+默认禁止明文流量，需要在自己的 Network Security Config 中只放行 `127.0.0.1`：
+
+```xml
+<network-security-config>
+    <base-config cleartextTrafficPermitted="false" />
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="false">127.0.0.1</domain>
+    </domain-config>
+</network-security-config>
+```
+
+不要为此把应用级 `usesCleartextTraffic` 全局设为 `true`。controller 仍必须绑定 loopback 并使用
+随机 secret。
+
+## 4. VPN 权限
 
 `startVpn()` 内部调用 `VpnService.prepare`。用户拒绝时返回 `VPN_PERMISSION_DENIED`。宿主应提供
 明确反馈，不要自动循环弹出系统授权页。
 
-## 4. Android 13+ 通知权限
+## 5. Android 13+ 通知权限
 
 前台服务必须存在，即使通知展示权限被拒绝。宿主负责请求 `POST_NOTIFICATIONS` 并解释实时速率
 通知的用途。
 
-## 5. 多进程存储
+## 6. 多进程存储
 
 VPN 服务运行在 `:remote` 进程。插件使用 MMKV multi-process mode 共享：
 
@@ -54,7 +71,7 @@ VPN 服务运行在 `:remote` 进程。插件使用 MMKV multi-process mode 共�
 
 宿主不要直接用普通 `SharedPreferences` 替代这些键，否则主进程写入后远程服务可能看不到。
 
-## 6. 分应用代理
+## 7. 分应用代理
 
 ```dart
 final settings = CsSettingsStorage();
@@ -73,7 +90,7 @@ settings.setAppList(
 宿主应封装自己的 enum，避免 UI 直接散布数字。恢复或修改该能力后必须真机验证 Android
 `VpnService.Builder` 实际应用了包名。
 
-## 7. 包体
+## 8. 包体
 
 Android 包体主要来自 `libbox.aar` 的多 ABI `libbox.so`。优先使用 ABI split 或 AAB；删除文档、
 示例和其他平台源码不会直接缩小最终 Android 原生库。
