@@ -1,7 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_sing_box/flutter_sing_box.dart';
 import 'package:flutter_sing_box/flutter_sing_box_platform_interface.dart';
-import 'package:flutter_sing_box/flutter_sing_box_method_channel.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 class MockFlutterSingBoxPlatform
@@ -88,6 +87,35 @@ class MockFlutterSingBoxPlatform
 
   @override
   Future<String> getSingBoxVersion() {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<WindowsServiceStatus> queryServiceStatus() {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> installService({
+    required String serviceName,
+    required String displayName,
+    required String description,
+  }) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> uninstallService() {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> startService() {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> stopService() {
     throw UnimplementedError();
   }
 }

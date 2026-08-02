@@ -8,7 +8,7 @@
 await FlutterSingBox().urlTest(groupTag: 'proxy');
 ```
 
-libbox 1.13.14 的 command API 只接受 group tag。调用后：
+libbox 1.13.15 的 command API 只接受 group tag。调用后：
 
 1. 内核并发测试该组内的非 group outbound。
 2. 方法在命令提交后返回，不等待网络请求完成。

@@ -75,7 +75,7 @@ Android 服务通过 AIDL 向插件进程回传状态，`SingBoxConnector` 再�
 插件当前通过 Maven 引入：
 
 ```gradle
-implementation("com.github.singbox-android:libbox:1.13.14")
+implementation("com.github.singbox-android:libbox:1.13.15")
 ```
 
 `libbox.aar` 是 Android 原生产物，内部包含多个 ABI 的 `libbox.so`。包体问题需要区分两个层次：

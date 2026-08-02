@@ -1,11 +1,33 @@
-## Unreleased
-本分支不会更新版本号，将会保持在1.1.4版本，持续迭代
-### Features
+> 本分支为 Android-only fork，版本号跟随上游 clash-sing/flutter_sing_box 的 release（2026-08-02 起，替代此前「冻结 1.1.4」策略）。每个版本条目分「与上游同步」与「本分支自研」两节；同步流程见 [docs/Upstream-Sync.md](docs/Upstream-Sync.md)。
+
+## 1.1.5
+
+### 与上游同步（clash-sing v1.1.5）
+* 升级 Android 端 `libbox`（sing-box 内核）：`1.13.14` → `1.13.15`。
+* 移除 Android 端未使用的位置权限（`ACCESS_COARSE_LOCATION` / `ACCESS_FINE_LOCATION` / `ACCESS_BACKGROUND_LOCATION`）。
+* 存储层增强：`KeyValueStorage` 各 setter 接受 null（等价删除键）、新增 `getDouble`/`setDouble`；
+  `CsSettingsStorage` 新增 `clash_api_port`、`test_url` 配置项（Android 侧暂无读方，Clash API
+  端口的事实源仍在宿主应用的 using_config 补丁链路）。
+* 服务管理接口形状对齐上游：门面/平台接口/方法通道新增 `queryServiceStatus` / `installService` /
+  `uninstallService` / `startService` / `stopService`（Android 走默认实现，返回 `unsupported` /
+  `true` / `false`），并吸收 `WindowsServiceStatus` 枚举与 `HelperConfig` 模型。
+* Dart 插件自动注册：`MethodChannelFlutterSingBox.registerWith()` + pubspec `dartPluginClass`
+  （Android 行为等价，主 library 相应导出方法通道实现）。
+* 新增 `InboundType` 常量导出、`FlutterSingBoxConstants.assetBasePath` 与 `defaultClashApiPort`、
+  Clash API 数据模型（`ClashApiProxy`、`ClashConfigs`）。
+* 升级 `dio`：`^5.9.0` → `^5.10.0`。
+* **未吸收**（本分支 Android-only）：Windows 平台全部实现（`FlutterSingBoxWindows`、`HelperCli`、
+  原生插件与二进制资产、`asset_util` 及其 `crypto` 依赖、pubspec windows 声明）；上游 release
+  所列「Clash API 端口动态适配」与「代理状态流控制器优化」的实现均位于 Windows 实现文件，一并跳过。
+
+### 本分支自研
+
+#### Features
 * 新增 `checkConfig(String configuration)` API，在 Android 后台线程调用 libbox 校验配置，并提供稳定错误码。
 * 新增 `urlTestOutbound(...)`，通过认证的 loopback Clash API 完成单 outbound 内核测速并返回延迟。
 * VPN 会话名称和插件通知默认标题改为继承宿主应用标签，不再硬编码 `Clash Sing`。
 
-### Fixes
+#### Fixes
 * `urlTestOutbound` 的 loopback controller 请求强制绕过系统代理（`Proxy.NO_PROXY`）。此前 TUN 的
   `platform.http_proxy` 开启时，Android 会把 controller 请求送进代理入站并按路由发往远端节点，
   表现为稳定的 `Clash API returned HTTP 502`（空响应体）。
@@ -16,12 +38,15 @@
   修正 `clash_mode: direct` 规则此前与 `ip_is_private`、`domain_suffix` 组成 AND 条件导致
   直连模式下绝大多数流量仍走代理的问题。
 
-### Breaking Changes
+#### Breaking Changes
 * 插件调整为 Android-only，移除 iOS 注册、原生实现和示例工程。
 
-### Documentation
+#### Documentation
 * 新增 Android 插件结构、运行链路、维护边界和包体优化说明。
 * 删除旧 Flutter 示例工程，改为能力矩阵和分主题 Markdown 使用范例。
+* 新增上游同步流程文档 [docs/Upstream-Sync.md](docs/Upstream-Sync.md)。
+
+同步基线：clash-sing/flutter_sing_box v1.1.5（216830e）
 
 
 ## 👆👆👆👆 WEP-56 fork change log 👆👆👆👆（From 2026/7/31）

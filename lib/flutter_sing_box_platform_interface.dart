@@ -1,8 +1,6 @@
 import 'package:flutter_sing_box/flutter_sing_box.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
-import 'flutter_sing_box_method_channel.dart';
-
 /// The interface that implementations of flutter_sing_box must implement.
 ///
 /// Platform implementations should extend this class rather than implementing it as an `interface`.
@@ -87,6 +85,40 @@ abstract class FlutterSingBoxPlatform extends PlatformInterface {
   /// Gets the version of the underlying sing-box core.
   Future<String> getSingBoxVersion() async {
     throw UnimplementedError('getSingBoxVersion() has not been implemented.');
+  }
+
+  /// 查询 Windows 端 `clash_sing_service` 的安装/运行状态。
+  ///
+  /// 仅 Windows 平台实现真正执行（调用 clash_sing_helper.exe status）；
+  /// 其他平台返回 [WindowsServiceStatus.unsupported]。
+  Future<WindowsServiceStatus> queryServiceStatus() {
+    throw UnimplementedError('queryServiceStatus() has not been implemented.');
+  }
+
+  Future<bool> installService({
+    required String serviceName,
+    required String displayName,
+    required String description,
+  }) async {
+    throw UnimplementedError('installService() has not been implemented.');
+  }
+
+  /// 卸载 Windows 系统服务。
+  ///
+  /// 仅 Windows 平台实现真正执行（UAC 提权调用 clash_sing_helper.exe uninstall
+  /// 并轮询确认）；其他平台返回 `false`。
+  Future<bool> uninstallService() async {
+    throw UnimplementedError('uninstallService() has not been implemented.');
+  }
+
+  /// 启动已安装的 Windows 系统服务。
+  Future<bool> startService() async {
+    throw UnimplementedError('startService() has not been implemented.');
+  }
+
+  /// 停止 Windows 系统服务（helper 内部走 HTTP API 同步关闭）。
+  Future<bool> stopService() async {
+    throw UnimplementedError('stopService() has not been implemented.');
   }
 
   /// Validates a sing-box configuration with the bundled core.

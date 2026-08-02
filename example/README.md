@@ -14,8 +14,8 @@
 - 仓库：`https://github.com/WEP-56/flutter_sing_box.git`
 - 分支：`master`
 - 平台：Android only
-- 当前包版本：`1.1.4`，WEP-56 分支通过 Git commit 持续迭代
-- libbox：`1.13.14`
+- 当前包版本：`1.1.5`，版本号跟随上游 release，分支间以 Git commit 持续迭代
+- libbox：`1.13.15`
 
 建议生产应用固定到已验证 commit；开发阶段可跟随 `master`，但必须提交更新后的
 `pubspec.lock`。

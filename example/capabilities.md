@@ -12,7 +12,7 @@
 | 停止 VPN | `stopVpn()` | 停止命令已提交 | 最终状态以 `proxyStateStream` 为准 |
 | 重载服务 | `serviceReload()` | 重载命令已提交 | 不保证新配置已成功启动 |
 | 配置校验 | `checkConfig(configuration)` | libbox 校验完成 | 在插件后台线程运行，不替换文件 |
-| 内核版本 | `getSingBoxVersion()` | 直接返回版本字符串 | 当前 AAR 为 1.13.14 |
+| 内核版本 | `getSingBoxVersion()` | 直接返回版本字符串 | 当前 AAR 为 1.13.15 |
 
 ## 策略组与测速
 
@@ -24,7 +24,7 @@
 | 整组测速 | `urlTest(groupTag)` | 仅表示命令提交成功 | 结果异步进入 `groupStream`，无请求 ID |
 | 单 outbound 测速 | `urlTestOutbound(...)` | 返回时已经得到该 outbound 延迟 | 需要认证的 loopback Clash API；返回毫秒 |
 
-libbox 1.13.14 的 command 绑定没有单 outbound URL test 方法。插件的单 outbound API 调用同一
+libbox 1.13.15 的 command 绑定没有单 outbound URL test 方法。插件的单 outbound API 调用同一
 sing-box 实例的 Clash API `/proxies/{tag}/delay`，实际连接仍由指定 outbound 建立。
 
 ## 事件流
@@ -39,6 +39,17 @@ sing-box 实例的 Clash API `/proxies/{tag}/delay`，实际连接仍由指定 o
 
 EventChannel 可能重复推送、分批推送或在服务停止时中断。宿主必须管理订阅生命周期并处理
 `onError`。
+
+## 上游接口形状兼容（Android 上为空操作）
+
+以下 API 为与上游 clash-sing 门面形状保持一致而存在（v1.1.5 起），服务概念仅存在于
+Windows 桌面端；本分支 Android-only，不含任何 Windows 实现，宿主不应调用它们承载业务：
+
+| 公开入口 | Android 返回值 |
+| --- | --- |
+| `queryServiceStatus()` | 恒 `WindowsServiceStatus.unsupported` |
+| `installService(...)` | 恒 `true`（无需安装，视为就绪） |
+| `uninstallService()` / `startService()` / `stopService()` | 恒 `false` |
 
 ## 配置与订阅
 

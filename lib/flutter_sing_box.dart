@@ -4,6 +4,11 @@ export '../src/utils/index.dart';
 export '../src/core/index.dart';
 export '../src/storage/index.dart';
 
+// 导出方法通道实现，供 Flutter 自动生成的 dart_plugin_registrant.dart
+// 通过主 library 访问并调用其 registerWith()（pubspec 中已声明 dartPluginClass）。
+// 本分支 Android-only，不导出其他平台实现。
+export 'flutter_sing_box_method_channel.dart';
+
 import 'flutter_sing_box.dart';
 import 'flutter_sing_box_platform_interface.dart';
 
@@ -91,6 +96,41 @@ class FlutterSingBox {
   /// Gets the version of the underlying sing-box core.
   Future<String> getSingBoxVersion() async {
     return await FlutterSingBoxPlatform.instance.getSingBoxVersion();
+  }
+
+  /// 查询 Windows 端 `clash_sing_service` 的安装/运行状态。
+  ///
+  /// 本分支 Android-only，恒返回 [WindowsServiceStatus.unsupported]；
+  /// 接口仅为与上游门面形状保持一致。
+  Future<WindowsServiceStatus> queryServiceStatus() {
+    return FlutterSingBoxPlatform.instance.queryServiceStatus();
+  }
+
+  Future<bool> installService({
+    required String serviceName,
+    required String displayName,
+    required String description,
+  }) {
+    return FlutterSingBoxPlatform.instance.installService(
+      serviceName: serviceName,
+      displayName: displayName,
+      description: description,
+    );
+  }
+
+  /// 卸载 Windows 系统服务。
+  Future<bool> uninstallService() {
+    return FlutterSingBoxPlatform.instance.uninstallService();
+  }
+
+  /// 启动已安装的 Windows 系统服务。
+  Future<bool> startService() {
+    return FlutterSingBoxPlatform.instance.startService();
+  }
+
+  /// 停止 Windows 系统服务。
+  Future<bool> stopService() {
+    return FlutterSingBoxPlatform.instance.stopService();
   }
 
   /// Validates a sing-box configuration with the bundled core.

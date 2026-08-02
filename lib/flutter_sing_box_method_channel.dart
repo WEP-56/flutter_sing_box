@@ -9,6 +9,10 @@ import 'flutter_sing_box_platform_interface.dart';
 
 /// An implementation of [FlutterSingBoxPlatform] that uses method channels.
 class MethodChannelFlutterSingBox extends FlutterSingBoxPlatform {
+  static void registerWith() {
+    FlutterSingBoxPlatform.instance = MethodChannelFlutterSingBox();
+  }
+
   /// The method channel used to interact with the native platform.
   @visibleForTesting
   final methodChannel = const MethodChannel('flutter_sing_box_method');
@@ -89,6 +93,28 @@ class MethodChannelFlutterSingBox extends FlutterSingBoxPlatform {
   Future<String> getSingBoxVersion() async {
     return await methodChannel.invokeMethod('getSingBoxVersion');
   }
+
+  @override
+  Future<WindowsServiceStatus> queryServiceStatus() async {
+    // Android / iOS 等非 Windows 桌面平台走此默认实现，无该服务概念。
+    return WindowsServiceStatus.unsupported;
+  }
+
+  @override
+  Future<bool> installService({
+    required String serviceName,
+    required String displayName,
+    required String description,
+  }) async => true;
+
+  @override
+  Future<bool> uninstallService() async => false;
+
+  @override
+  Future<bool> startService() async => false;
+
+  @override
+  Future<bool> stopService() async => false;
 
   @override
   Future<void> checkConfig(String configuration) async {
