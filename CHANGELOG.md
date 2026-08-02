@@ -5,6 +5,17 @@
 * 新增 `urlTestOutbound(...)`，通过认证的 loopback Clash API 完成单 outbound 内核测速并返回延迟。
 * VPN 会话名称和插件通知默认标题改为继承宿主应用标签，不再硬编码 `Clash Sing`。
 
+### Fixes
+* `urlTestOutbound` 的 loopback controller 请求强制绕过系统代理（`Proxy.NO_PROXY`）。此前 TUN 的
+  `platform.http_proxy` 开启时，Android 会把 controller 请求送进代理入站并按路由发往远端节点，
+  表现为稳定的 `Clash API returned HTTP 502`（空响应体）。
+* `setClashMode` 改为大小写不敏感匹配内核模式列表，并把列表中的精确值转发给 libbox（libbox 对
+  未知模式静默忽略，插件必须先行校验）。避免配置里 `default_mode` / `clash_mode` 规则大小写
+  不一致时误报 `INVALID_CLASH_MODE`。
+* 模板配置：新增 `ip_is_private → direct` 路由规则（局域网/回环目标不再落入 `final` 代理出站）；
+  修正 `clash_mode: direct` 规则此前与 `ip_is_private`、`domain_suffix` 组成 AND 条件导致
+  直连模式下绝大多数流量仍走代理的问题。
+
 ### Breaking Changes
 * 插件调整为 Android-only，移除 iOS 注册、原生实现和示例工程。
 

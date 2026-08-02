@@ -95,4 +95,33 @@ internal class FlutterSingBoxPluginTest {
             null,
         )
     }
+
+    @Test
+    fun setClashModeRejectsBlankArguments() {
+        val plugin = FlutterSingBoxPlugin()
+        val mockResult: MethodChannel.Result = Mockito.mock(MethodChannel.Result::class.java)
+
+        plugin.onMethodCall(MethodCall("setClashMode", "  "), mockResult)
+
+        Mockito.verify(mockResult).error(
+            "INVALID_ARGUMENTS",
+            "无效的参数",
+            null,
+        )
+    }
+
+    @Test
+    fun setClashModeRejectsModesOutsideTheKnownList() {
+        val plugin = FlutterSingBoxPlugin()
+        val mockResult: MethodChannel.Result = Mockito.mock(MethodChannel.Result::class.java)
+
+        // 未附加 engine 时没有内核模式列表，任何模式都应被稳定拒绝而不是崩溃。
+        plugin.onMethodCall(MethodCall("setClashMode", "Rule"), mockResult)
+
+        Mockito.verify(mockResult).error(
+            "INVALID_CLASH_MODE",
+            "无效的Clash模式",
+            null,
+        )
+    }
 }

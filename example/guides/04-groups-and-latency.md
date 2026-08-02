@@ -60,6 +60,10 @@ GET /proxies/{outboundTag}/delay?url={url}&timeout={milliseconds}
 
 插件从活动 `using_config.json` 读取 controller 和 secret，调用方不传递凭据。
 
+controller 请求强制以 `Proxy.NO_PROXY` 直连发出。TUN 的 `platform.http_proxy` 开启时，
+Android 会向所有应用下发系统 HTTP 代理且默认不排除 localhost；若不绕过，回环 controller
+请求会被送进代理入站并按路由发往远端节点，表现为稳定的空响应体 `HTTP 502`。
+
 ## 4. 失败行为
 
 | 场景 | 错误码 |

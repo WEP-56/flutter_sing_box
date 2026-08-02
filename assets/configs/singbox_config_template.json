@@ -90,15 +90,15 @@
         "action": "reject"
       },
       {
+        "ip_is_private": true,
+        "outbound": "direct"
+      },
+      {
         "clash_mode": "global",
         "outbound": "proxy"
       },
       {
         "clash_mode": "direct",
-        "ip_is_private": true,
-        "domain_suffix": [
-          ".cn"
-        ],
         "outbound": "direct"
       },
       {

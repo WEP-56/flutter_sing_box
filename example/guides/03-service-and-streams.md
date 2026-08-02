@@ -46,6 +46,13 @@ final logs = client.logStream.listen((batch) {
 });
 ```
 
+内核的可用模式列表 = `clash_api.default_mode` + 路由/DNS 规则里引用过的 `clash_mode` 值。
+一个模式只有被 default_mode 或至少一条规则引用才会出现在列表里；`setClashMode` 对列表外的
+模式返回 `INVALID_CLASH_MODE`（大小写不敏感匹配）。若希望三种模式都可切换，配置里必须让
+`rule` / `global` / `direct` 各自被引用到，常见做法是把 `default_mode` 固定为 `rule`。
+另外 `cache_file` 开启时内核会持久化上次模式并在启动时优先恢复它，宿主若有自己的模式偏好，
+应在服务进入 Started 后主动 `setClashMode` 一次。
+
 日志可能包含服务器地址、订阅 URL 或错误上下文。导出和分享前必须脱敏。
 
 ## 4. 命令完成语义

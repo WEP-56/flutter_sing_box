@@ -20,6 +20,7 @@ import io.nekohasekai.sfa.bg.BoxService
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.InetAddress
+import java.net.Proxy
 import java.net.URL
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ExecutorService
@@ -104,9 +105,18 @@ class FlutterSingBoxPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, Pl
                 }
             }
             "setClashMode" -> {
-                val clashMode = call.arguments as String
-                if (singBoxConnector?.clientClashMode?.modes?.contains(clashMode) == true) {
-                    Libbox.newStandaloneCommandClient().setClashMode(clashMode)
+                val requested = call.arguments as? String
+                if (requested.isNullOrBlank()) {
+                    result.error("INVALID_ARGUMENTS", "无效的参数", null)
+                    return
+                }
+                // 内核模式列表的大小写取决于配置里 default_mode 与 clash_mode 规则
+                // 的写法，这里做大小写不敏感匹配，并把列表中的精确值转发给 libbox
+                // （libbox 对未知模式会静默忽略，必须由插件先行校验）。
+                val resolved = singBoxConnector?.clientClashMode?.modes
+                    ?.firstOrNull { it.equals(requested, ignoreCase = true) }
+                if (resolved != null) {
+                    Libbox.newStandaloneCommandClient().setClashMode(resolved)
                     singBoxConnector?.clashModeClient?.connect()
                     result.success(null)
                 } else {
@@ -275,7 +285,10 @@ class FlutterSingBoxPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, Pl
             .appendQueryParameter("url", testUrl)
             .appendQueryParameter("timeout", timeoutMs.toString())
             .build()
-        val connection = URL(requestUri.toString()).openConnection() as HttpURLConnection
+        // TUN 的 platform.http_proxy 开启时，Android 会向所有应用下发系统 HTTP
+        // 代理（默认不排除 localhost）。回环 controller 请求一旦被送进代理入站，
+        // 会按路由规则被发往远端节点并得到一个空响应体的 502。必须强制直连。
+        val connection = URL(requestUri.toString()).openConnection(Proxy.NO_PROXY) as HttpURLConnection
         return try {
             connection.requestMethod = "GET"
             connection.connectTimeout = timeoutMs
